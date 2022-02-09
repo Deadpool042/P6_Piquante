@@ -12,6 +12,6 @@ npm start
 
 Dans le dossier du front end
 
-npm install --save-dev run-script-os
+npm install run-script-os
 npm start
 
