@@ -5,5 +5,13 @@ Et renseigner les variables d'environnement requises
 
 Créer un dossier images dans la racine
 
+Dans le dossier du backend end:
+
 npm install
+npm start
+
+Dans le dossier du front end
+
+npm install --save-dev run-script-os
+
 npm start
