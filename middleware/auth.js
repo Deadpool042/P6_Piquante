@@ -13,16 +13,15 @@ module.exports = (req, res, next) => {
     const userId = decodedToken.userId;
     // Récupère l'userId depuis le token
     if (req.body.userId && req.body.userId !== userId) {
-    // Compare l'userId et l'userId issu du token
+      // Compare l'userId et l'userId issu du token
       throw "User ID invalide";
-    // Si true (ne correspond pas) renvoi l'erreur
+      // Si true (ne correspond pas) renvoi l'erreur
     } else {
       next();
-    // Si false, lit le middleware suivant,
-    // dans notre cas, les controlleurs ou multer pour les sauces
+      // Si false, lit le middleware suivant,
+      // dans notre cas, les controlleurs ou multer pour les sauces
     }
-  } catch {
-    res.status(401).json({ error: "Requête invalide!" });
+  } catch (err) {
+    res.status(403).json({ err });
   }
 };
-

@@ -37,7 +37,9 @@ exports.create = (req, res, next) => {
     dislikes: 0,
     //ajout à la requête le corps (body) de la requête
     //puis les objets "likes" et "dislikes"
-    imageUrl: `${req.protocol}://${req.get("host")}/images/${req.file.filename}`,
+    imageUrl: `${req.protocol}://${req.get("host")}/images/${
+      req.file.filename
+    }`,
     //ajoute également une image avec le lien dynamique concaténé
     //Le tout stocké dans la constante sauce
   });
@@ -66,8 +68,8 @@ exports.deleteOne = (req, res, next) => {
       // suppression de l'objet du parametre de requête dans la bdd
       .then(() => res.status(200).json({ message: "Objet supprimé" }))
       // renvoi un code 200(ok) appuyé d'un message
-      .catch((error) => res.status(400).json({ error }));
-    // renvoi une erreur 400 l cas échéant
+      .catch((error) => res.status(403).json({ error }));
+    // renvoi une erreur 403 l cas échéant
   });
 };
 
@@ -78,18 +80,24 @@ exports.modify = (req, res, next) => {
         //Si le fichier existe et qu'il est different,
         ...JSON.parse(req.body.sauce),
         //recupere et applique la méthode .parse() à la requête
-        imageUrl: `${req.protocol}://${req.get("host")}/images/${req.file.filename}`,
+        imageUrl: `${req.protocol}://${req.get("host")}/images/${
+          req.file.filename
+        }`,
         //puis modifie le fichier (l'image en l'occurence) associé
       }
     : { ...req.body };
   //Si le fichier n'est pas different,
-  Sauce.updateOne({ _id: req.params.id }, { ...sauceObject, _id: req.params.id })
+  Sauce.updateOne(
+    { _id: req.params.id },
+    { ...sauceObject, _id: req.params.id }
+  )
     // mets juste a jour l'objet dans la bdd
     .then(res.status(200).json({ message: "Objet modifié" }))
     //Renvoi un code 200 (ok) appuyé d'un message
-    .catch((error) => res.status(400).json({ error }));
-  //Renvoi une erreur 400 le cas échéant
+    .catch((error) => res.status(403).json({ error }));
+  //Renvoi une erreur 403 le cas échéant
 };
+
 exports.statusLike = (req, res, next) => {
   // stockage des données nécessaires pour la lecture et comprehension du code
   let like = req.body.like;
@@ -101,7 +109,10 @@ exports.statusLike = (req, res, next) => {
 
   switch (like) {
     case 1:
-      Sauce.updateOne({ _id: sauceId }, { $push: { usersLiked: userId }, $inc: { likes: +1 } })
+      Sauce.updateOne(
+        { _id: sauceId },
+        { $push: { usersLiked: userId }, $inc: { likes: +1 } }
+      )
         // Si like = 1 , push l'userId dans le tableau "usersLiked"  + incremente de 1 likes
         // l'objet like du schéma sauce --> mets a jour la bdd
         .then(() => res.status(200).json({ message: "like" }))
@@ -115,7 +126,10 @@ exports.statusLike = (req, res, next) => {
         .then((sauce) => {
           if (sauce.usersLiked.includes(userId)) {
             //S'il l'userId est dans le tableau usersLiked
-            Sauce.updateOne({ _id: sauceId }, { $pull: { usersLiked: userId }, $inc: { likes: -1 } })
+            Sauce.updateOne(
+              { _id: sauceId },
+              { $pull: { usersLiked: userId }, $inc: { likes: -1 } }
+            )
               //Mets a jour la bdd --> enleve l'userId de usersLiked et incremente likse de -1
               .then(() => res.status(200).json({ message: `Neutre` }))
               //Renvoi un code 200 (ok) appuyé d'un message
@@ -124,7 +138,10 @@ exports.statusLike = (req, res, next) => {
           }
           if (sauce.usersDisliked.includes(userId)) {
             //S'il l'userId est dans le tableau usersDisliked
-            Sauce.updateOne({ _id: sauceId }, { $pull: { usersDisliked: userId }, $inc: { dislikes: -1 } })
+            Sauce.updateOne(
+              { _id: sauceId },
+              { $pull: { usersDisliked: userId }, $inc: { dislikes: -1 } }
+            )
               //Mets a jour la bdd --> enleve l'userId de usersDisliked et incremente dislikes de -1
               .then(() => res.status(200).json({ message: `Neutre` }))
               //Renvoi un code 200 (ok) appuyé d'un message
@@ -137,7 +154,10 @@ exports.statusLike = (req, res, next) => {
       break;
 
     case -1:
-      Sauce.updateOne({ _id: sauceId }, { $push: { usersDisliked: userId }, $inc: { dislikes: +1 } })
+      Sauce.updateOne(
+        { _id: sauceId },
+        { $push: { usersDisliked: userId }, $inc: { dislikes: +1 } }
+      )
         // Si like = -1 , push l'userId dans le tableau "usersDiskliked"  + incremente de 1
         // l'objet disklikes du schéma sauce --> mets a jour la bdd
         .then(() => {
