@@ -15,6 +15,7 @@ module.exports = (req, res, next) => {
     if (req.body.userId && req.body.userId !== userId) {
       // Compare l'userId et l'userId issu du token
       throw "User ID invalide";
+
       // Si true (ne correspond pas) renvoi l'erreur
     } else {
       next();
@@ -22,6 +23,6 @@ module.exports = (req, res, next) => {
       // dans notre cas, les controlleurs ou multer pour les sauces
     }
   } catch (err) {
-    res.status(403).json({ err });
+    res.status(403).json({ error: err | "Requête non authentifiée" });
   }
 };

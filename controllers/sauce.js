@@ -7,7 +7,7 @@ exports.getAll = (req, res, next) => {
     // La méthode .find() permet de rechercher
     .then((sauces) => res.status(200).json(sauces))
     // renvoi un tableau de toutes les sauces présentes
-    .catch((error) => res.status(400).json({ error }));
+    .catch((error) => res.status(404).json({ error }));
   // renvoi une erreur 400 (mauvause requête) le cas échéant
 };
 
@@ -35,6 +35,8 @@ exports.create = (req, res, next) => {
     ...sauceObject,
     likes: 0,
     dislikes: 0,
+    usersLiked: [],
+    usersDisliked: [],
     //ajout à la requête le corps (body) de la requête
     //puis les objets "likes" et "dislikes"
     imageUrl: `${req.protocol}://${req.get("host")}/images/${
@@ -68,8 +70,8 @@ exports.deleteOne = (req, res, next) => {
       // suppression de l'objet du parametre de requête dans la bdd
       .then(() => res.status(200).json({ message: "Objet supprimé" }))
       // renvoi un code 200(ok) appuyé d'un message
-      .catch((error) => res.status(403).json({ error }));
-    // renvoi une erreur 403 l cas échéant
+      .catch((error) => res.status(400).json({ error }));
+    // renvoi une erreur 400 l cas échéant
   });
 };
 
@@ -94,8 +96,8 @@ exports.modify = (req, res, next) => {
     // mets juste a jour l'objet dans la bdd
     .then(res.status(200).json({ message: "Objet modifié" }))
     //Renvoi un code 200 (ok) appuyé d'un message
-    .catch((error) => res.status(403).json({ error }));
-  //Renvoi une erreur 403 le cas échéant
+    .catch((error) => res.status(400).json({ error }));
+  //Renvoi une erreur 400 le cas échéant
 };
 
 exports.statusLike = (req, res, next) => {

@@ -18,7 +18,7 @@ router.get("/", auth, sauceCtrl.getAll);
 //de la logique de route
 router.get("/:id", auth, sauceCtrl.getOne);
 
-router.post("/", auth, multer, sauceCtrl.create);
+router.post("/", multer, sauceCtrl.create);
 
 router.put("/:id", auth, multer, sauceCtrl.modify);
 

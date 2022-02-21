@@ -6,7 +6,9 @@ const dotenv = require("dotenv");
 dotenv.config();
 
 exports.signup = (req, res, next) => {
-  const hashEmail = cryptojs.HmacSHA512(req.body.email, process.env.EMAIL_TOKEN).toString(cryptojs.enc.Base64);
+  const hashEmail = cryptojs
+    .HmacSHA512(req.body.email, process.env.EMAIL_TOKEN)
+    .toString(cryptojs.enc.Base64);
   bcrypt
     .hash(req.body.password, 10)
     .then((hash) => {
@@ -24,7 +26,9 @@ exports.signup = (req, res, next) => {
 };
 
 exports.login = (req, res, next) => {
-  const hashEmail = cryptojs.HmacSHA512(req.body.email, process.env.EMAIL_TOKEN).toString(cryptojs.enc.Base64);
+  const hashEmail = cryptojs
+    .HmacSHA512(req.body.email, process.env.EMAIL_TOKEN)
+    .toString(cryptojs.enc.Base64);
   User.findOne({ email: hashEmail })
     .then((user) => {
       if (!user) {
@@ -40,7 +44,9 @@ exports.login = (req, res, next) => {
 
           res.status(200).json({
             userId: user._id,
-            token: jwt.sign({ userId: user._id }, process.env.SECRET_KEY, { expiresIn: "24h" }),
+            token: jwt.sign({ userId: user._id }, process.env.SECRET_KEY, {
+              expiresIn: "24h",
+            }),
           });
         })
 
@@ -48,5 +54,3 @@ exports.login = (req, res, next) => {
     })
     .catch((error) => res.status(500).json({ error }));
 };
-
-
